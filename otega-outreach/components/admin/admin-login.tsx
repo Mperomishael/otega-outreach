@@ -2,26 +2,35 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useAuth } from "./auth-provider"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import { AlertCircle } from "lucide-react"
 import CircularLoader from "@/components/ui/circular-loader"
 
 export default function AdminLogin() {
-  const { signInWithGoogle, sendEmailLink, emailLinkSent, loading } = useAuth()
+  const { signInWithGoogle, sendEmailLink, emailLinkSent, loading, user, isAuthorized } = useAuth()
   const [email, setEmail] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
+  const router = useRouter()
 
   const searchParams = useSearchParams()
   const authError = searchParams?.get("authError")
+
+  // Check if user is already authenticated and authorized
+  useEffect(() => {
+    if (user && isAuthorized) {
+      router.push("/admin")
+    }
+  }, [user, isAuthorized, router])
 
   const handleGoogleSignIn = async () => {
     try {
       setError(null)
       setStatusMessage("Authenticating with Google...")
       await signInWithGoogle()
+      // The redirect will happen in the useEffect above
     } catch (error: any) {
       console.error("Google sign-in error:", error)
       setError(error.message || "Failed to sign in with Google. Please try again.")
