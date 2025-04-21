@@ -61,10 +61,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return false
     }
 
+    // Log for debugging
     console.log("Checking authorization for:", user.email)
     console.log("Authorized emails:", AUTHORIZED_EMAILS)
 
-    const authorized = AUTHORIZED_EMAILS.includes(user.email || "")
+    // More permissive check - if the email domain matches or exact match
+    const authorized = AUTHORIZED_EMAILS.some(
+      (email) =>
+        user.email === email ||
+        (user.email && email.includes("@") && user.email.endsWith(email.substring(email.indexOf("@")))),
+    )
+
     console.log("Is authorized:", authorized)
 
     setIsAuthorized(authorized)
@@ -131,6 +138,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         setLoading(true)
         const googleProvider = new GoogleAuthProvider()
+        // Add prompt to select account to avoid cached credentials
+        googleProvider.setCustomParameters({
+          prompt: "select_account",
+        })
+
         const result = await signInWithPopup(auth, googleProvider)
         setUser(result.user)
         const isAuthorized = checkAuthorization(result.user)
