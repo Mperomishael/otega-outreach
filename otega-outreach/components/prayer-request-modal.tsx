@@ -75,7 +75,7 @@ export default function PrayerRequestModal({ isOpen, onClose, onSubmitSuccess }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 animate-fade-in">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-50 animate-fade-in">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto animate-scale-in">
         <div className="flex justify-between items-center p-4 border-b">
           <h3 className="text-lg font-semibold">{t("submitPrayerRequest")}</h3>
