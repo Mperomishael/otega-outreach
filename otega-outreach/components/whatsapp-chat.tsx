@@ -96,6 +96,7 @@ export default function WhatsAppChat() {
     setMessages((prev) => [...prev, { type: "user", text: inputValue }])
 
     // Clear input
+    const userMessage = inputValue
     setInputValue("")
 
     // Show typing indicator
@@ -115,7 +116,7 @@ export default function WhatsAppChat() {
 
       // Redirect to WhatsApp after a short delay
       setTimeout(() => {
-        const encodedMessage = encodeURIComponent(inputValue)
+        const encodedMessage = encodeURIComponent(userMessage)
         window.open(`https://wa.me/2348131003708?text=${encodedMessage}`, "_blank")
       }, 1500)
     }, 1500)
@@ -141,7 +142,8 @@ export default function WhatsAppChat() {
     }, 1500)
   }
 
-  const handlePrayerRequestClose = () => {
+  const handlePrayerRequestSubmit = () => {
+    // Close the prayer request modal
     setShowPrayerModal(false)
 
     // Show typing indicator
@@ -303,19 +305,11 @@ export default function WhatsAppChat() {
 
       {/* Prayer Request Modal */}
       {showPrayerModal && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto animate-scale-in">
-            <div className="p-4 flex justify-between items-center border-b">
-              <h2 className="text-xl font-bold text-amber-700">Prayer Request</h2>
-              <button onClick={() => setShowPrayerModal(false)} className="text-gray-500 hover:text-gray-700">
-                <X size={24} />
-              </button>
-            </div>
-            <div className="p-4">
-              <PrayerRequestModal onClose={handlePrayerRequestClose} />
-            </div>
-          </div>
-        </div>
+        <PrayerRequestModal
+          isOpen={showPrayerModal}
+          onClose={handlePrayerRequestSubmit}
+          onSubmitSuccess={handlePrayerRequestSubmit}
+        />
       )}
     </>
   )
