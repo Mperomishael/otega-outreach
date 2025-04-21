@@ -31,12 +31,22 @@ if (typeof window !== "undefined") {
     auth = getAuth(app)
     db = getFirestore(app)
     storage = getStorage(app)
+
+    // Set persistence to local for better user experience
+    // This helps maintain the session even if the page is refreshed
+    auth.setPersistence("local").catch((error) => {
+      console.error("Error setting auth persistence:", error)
+    })
   } catch (error) {
     console.error("Firebase initialization error:", error)
   }
 }
 
 // Authorized admin emails - ensure this includes the correct email
-export const AUTHORIZED_EMAILS = ["otegaevangelicaloutreach@gmail.com", "empiredigitalsworldwide@gmail.com"]
+export const AUTHORIZED_EMAILS = [
+  "otegaevangelicaloutreach@gmail.com",
+  "empiredigitalsworldwide@gmail.com",
+  // Add any additional authorized emails here
+]
 
 export { app, auth, db, storage }
