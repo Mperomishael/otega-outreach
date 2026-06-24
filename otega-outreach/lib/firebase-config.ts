@@ -42,7 +42,6 @@ if (typeof window !== "undefined") {
   }
 }
 
-// Authorized admin emails - ensure this includes the correct email
 export const AUTHORIZED_EMAILS = [
   "otegaevangelicaloutreach@gmail.com",
   "empiredigitalsworldwide@gmail.com",
