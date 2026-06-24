@@ -45,6 +45,7 @@ if (typeof window !== "undefined") {
 export const AUTHORIZED_EMAILS = [
   "otegaevangelicaloutreach@gmail.com",
   "empiredigitalsworldwide@gmail.com",
+  "letstalk2@mishael@gmail.com",
   "otegaconcept@gmail.com",   // ← Added
   // Add any additional authorized emails here
 ]
