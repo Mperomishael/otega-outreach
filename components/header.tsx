@@ -1,176 +1,78 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Menu, X, ChevronDown, Book } from "lucide-react"
-import { usePathname } from "next/navigation"
-import LanguageSwitcher from "./language-switcher"
-import { useLanguage } from "./language-context"
+import { useState } from "react";
+import { ChevronDown, Infinity, Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import LanguageSwitcher from "./language-switcher";
+
+const navLinks = [
+  { label: 'Home', active: true },
+  { label: 'About', dropdown: true },
+  { label: 'Ministries' },
+  { label: 'Partners' },
+  { label: 'Media' },
+  { label: 'Contact' },
+  { label: 'Donate' },
+];
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
-  const pathname = usePathname()
-  const { t } = useLanguage()
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const pathname = usePathname();
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-    if (isMenuOpen) {
-      setOpenDropdown(null)
-    }
-  }
+    setMenuOpen(!menuOpen);
+    if (menuOpen) setOpenDropdown(null);
+  };
 
-  const toggleDropdown = (dropdown: string) => {
-    setOpenDropdown(openDropdown === dropdown ? null : dropdown)
-  }
-
-  const isActive = (path: string) => {
-    return pathname === path
-  }
-
-  const navItems = [
-    { name: t("home"), path: "/" },
-    {
-      name: t("about"),
-      path: "/about",
-      dropdown: [
-        { name: t("ourMission"), path: "/about" },
-        { name: "Our History", path: "/about#history" },
-        { name: "Statement of Faith", path: "/about#faith" },
-      ],
-    },
-    {
-      name: t("ministries"),
-      path: "/ministries",
-      dropdown: [
-        { name: t("ourEvangelists"), path: "/evangelists" },
-        { name: t("testimonies"), path: "/testimonies" },
-        { name: "Rural Church Planting", path: "/ministries/church-planting" },
-        { name: "Leadership Training", path: "/ministries/leadership" },
-      ],
-    },
-    { name: t("partners"), path: "/partners" },
-    { name: t("media"), path: "/media" },
-    { name: t("blog"), path: "/blog" },
-    { name: t("contact"), path: "/contact" },
-    { name: t("donate"), path: "/donate" },
-  ]
+  const toggleDropdown = (name: string) => {
+    setOpenDropdown(openDropdown === name ? null : name);
+  };
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center">
-            <Book className="h-8 w-8 text-amber-800 mr-2" />
-            <span className="font-bold text-xl text-amber-800">Otega Evangelical Outreach</span>
-          </Link>
-
-          <div className="flex items-center">
-            {/* Language Switcher */}
-            <div className="hidden md:block mr-4">
-              <LanguageSwitcher />
-            </div>
-
-            {/* Mobile menu button */}
-            <button className="md:hidden p-2" onClick={toggleMenu} aria-label="Toggle menu">
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-
-            {/* Desktop navigation */}
-            <nav className="hidden md:flex items-center space-x-6">
-              {navItems.map((item) => (
-                <div key={item.name} className="relative group">
-                  {item.dropdown ? (
-                    <button
-                      className={`flex items-center gap-1 py-2 ${
-                        isActive(item.path) ? "text-amber-800 font-medium" : "hover:text-amber-800"
-                      }`}
-                      onClick={() => toggleDropdown(item.name)}
-                    >
-                      {item.name}
-                      <ChevronDown size={16} />
-                    </button>
-                  ) : (
-                    <Link
-                      href={item.path}
-                      className={`py-2 ${isActive(item.path) ? "text-amber-800 font-medium" : "hover:text-amber-800"}`}
-                    >
-                      {item.name}
-                    </Link>
-                  )}
-
-                  {item.dropdown && (
-                    <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden hidden group-hover:block">
-                      <div className="py-2">
-                        {item.dropdown.map((dropdownItem) => (
-                          <Link
-                            key={dropdownItem.name}
-                            href={dropdownItem.path}
-                            className="block px-4 py-2 hover:bg-amber-50 hover:text-amber-800"
-                          >
-                            {dropdownItem.name}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </nav>
-          </div>
+    <header className="absolute top-0 left-0 right-0 z-50 bg-transparent">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-6 flex items-center justify-between">
+        {/* Logo */}
+        <div className="flex items-center gap-3 text-white text-2xl font-medium">
+          <Infinity size={28} strokeWidth={1.5} className="text-green-400" />
+          <span>Otega</span>
         </div>
 
-        {/* Mobile navigation */}
-        {isMenuOpen && (
-          <nav className="md:hidden py-4 border-t">
-            <div className="mb-4">
-              <LanguageSwitcher />
-            </div>
-            <ul className="space-y-2">
-              {navItems.map((item) => (
-                <li key={item.name}>
-                  {item.dropdown ? (
-                    <div>
-                      <button
-                        className={`flex items-center justify-between w-full py-2 ${
-                          isActive(item.path) ? "text-amber-800 font-medium" : ""
-                        }`}
-                        onClick={() => toggleDropdown(item.name)}
-                      >
-                        {item.name}
-                        <ChevronDown size={16} className={openDropdown === item.name ? "transform rotate-180" : ""} />
-                      </button>
+        {/* Desktop Nav Pill */}
+        <div className="hidden md:flex items-center gap-1 liquid-glass rounded-3xl px-3 py-3">
+          {navLinks.map((link, i) => (
+            <button
+              key={i}
+              onClick={() => link.dropdown && toggleDropdown(link.label)}
+              className={`flex items-center gap-1.5 px-5 py-2 rounded-2xl text-sm transition-all ${
+                link.active || openDropdown === link.label
+                  ? 'bg-white/15 text-white'
+                  : 'text-white/70 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              {link.label}
+              {link.dropdown && <ChevronDown size={14} className={`transition-transform ${openDropdown === link.label ? 'rotate-180' : ''}`} />}
+            </button>
+          ))}
+        </div>
 
-                      {openDropdown === item.name && (
-                        <div className="pl-4 mt-2 border-l-2 border-amber-200 space-y-2">
-                          {item.dropdown.map((dropdownItem) => (
-                            <Link
-                              key={dropdownItem.name}
-                              href={dropdownItem.path}
-                              className="block py-2 hover:text-amber-800"
-                              onClick={toggleMenu}
-                            >
-                              {dropdownItem.name}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <Link
-                      href={item.path}
-                      className={`block py-2 ${isActive(item.path) ? "text-amber-800 font-medium" : ""}`}
-                      onClick={toggleMenu}
-                    >
-                      {item.name}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </nav>
+        {/* Mobile Toggle */}
+        <button onClick={toggleMenu} className="md:hidden liquid-glass p-3 rounded-2xl text-white">
+          {menuOpen ? <X size={26} /> : <Menu size={26} />}
+        </button>
+
+        {/* Mobile Menu */}
+        {menuOpen && (
+          <div className="absolute top-[76px] left-4 right-4 z-50 md:hidden liquid-glass rounded-3xl p-6 flex flex-col gap-4">
+            {navLinks.map((link, i) => (
+              <button key={i} className="flex items-center justify-between w-full px-6 py-4 rounded-2xl text-lg hover:bg-white/10 transition-colors">
+                {link.label}
+                {link.dropdown && <ChevronDown size={18} />}
+              </button>
+            ))}
+          </div>
         )}
       </div>
     </header>
-  )
+  );
 }
