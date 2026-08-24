@@ -19,7 +19,7 @@ body {
   background: #f8f9fa;
 }
 
-/* Your exact liquid-glass */
+/* === YOUR EXACT LIQUID-GLASS FROM THE PROMPT === */
 .liquid-glass {
   background: rgba(255,255,255,0.01);
   background-blend-mode: luminosity;
@@ -44,7 +44,9 @@ body {
   pointer-events: none;
 }
 
-/* Your existing animations (keep them) */
-@keyframes gentle-bounce { ... } /* paste the full block from your current globals.css */
-.animate-gentle-bounce { animation: gentle-bounce 2s ease-in-out infinite; }
-/* ... all other animations from your current file */
+/* All your existing animations (keep them) */
+@keyframes gentle-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+.animate-gentle-bounce { animation:
